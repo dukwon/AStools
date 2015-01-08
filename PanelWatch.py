@@ -1,5 +1,4 @@
 # This thing goes through the log and flags when P+ers approve a question from outside of their field
-# Log in, get subreddit
 import praw
 import redditcredentials
 import mytools
@@ -9,6 +8,7 @@ import ast
 import re
 import os
 now = time.time()
+# Log in, get subreddit
 user = redditcredentials.username
 passw = redditcredentials.password
 target_sub = 'askscience'
@@ -36,14 +36,15 @@ print "Stripped log to",nact,"P+ actions  "
 # Are they doing at least a third of approvals?
 if nact*3 < len(log):
   print nact,"out of",str(len(log))+"?!","The lazy bastards!  "
-# Loop through actions
-count=0
+# Open file for logging
 if not os.path.exists("reports"):
   os.makedirs("reports")
 if not os.path.exists("reports/PanelWatch.report"):
   reportfile = open("reports/PanelWatch.report", "w")
 else:
   reportfile = open("reports/PanelWatch.report", "a")
+# Loop through actions
+count=0
 for action in panelactions:
   count+=1
   # Get approver and flair
