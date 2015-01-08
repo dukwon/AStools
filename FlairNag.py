@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # This thing goes through the modqueue and identifies links over a certain age that need a flair
 # Log in, get subreddit
 import praw

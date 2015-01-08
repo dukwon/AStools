@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 # Modified version of nallen's original script, but with logging
 import praw
 import redditcredentials
 import time
 import os
 def main():
+  date = time.strftime("%Y-%m-%d")
   # Log in, get subreddits
   user = redditcredentials.username
   passw = redditcredentials.password
@@ -35,7 +37,7 @@ def main():
   # Find new panel members
   to_approve = [i for i in flaired if i not in approved]
   print len(to_approve), "to approve"
-  reportfile.write("\nAdding "+str(len(to_approve))+" users")
+  reportfile.write("\n"+date+"\tAdding "+str(len(to_approve))+" users")
   # Add new members to ASP
   for i in to_approve:
     try:

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# Gives ReadQueue and ReadLog functions
 import sys
 import praw
 def ReadQueue(sr,only="",time=0,lim=1000):

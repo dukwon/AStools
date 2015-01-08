@@ -1,4 +1,5 @@
-# Originally migrate_flair.py from gavin19 https://gist.github.com/gavin19/7874646
+# -*- coding: utf-8 -*-
+# Originally migrate_flair.py from gavin19
 # Modified by medstudent22
 # Further modified by dukwon
 import praw
