@@ -1,3 +1,4 @@
+# Modified version of nallen's original script, but with logging
 import praw
 import redditcredentials
 import time
@@ -43,5 +44,6 @@ def main():
     except praw.errors.InvalidUser:
       print "No such user", i
       pass
+  print target_sub " updated"
 if __name__ == '__main__':
-    main()
+  main()
