@@ -7,6 +7,7 @@ import time
 import urllib2
 import ast
 import re
+import os
 now = time.time()
 user = redditcredentials.username
 passw = redditcredentials.password
@@ -27,7 +28,7 @@ while True:
 # Create list of P+ers
 panel = [mod["name"] for mod in mods["data"]["children"] if "posts" in mod["mod_permissions"] and mod["name"] != "AutoModerator"]
 # Retrieve items from the modqueue
-log = mytools.ReadLog(sr=sr,time=now-3601,actiontype="approvelink")
+log = mytools.ReadLog(sr=sr,time=now-3600,actiontype="approvelink")
 # Find actions by P+ers
 panelactions = [action for action in log if action.mod in panel]
 nact=len(panelactions)
@@ -37,6 +38,12 @@ if nact*3 < len(log):
   print nact,"out of",str(len(log))+"?!","The lazy bastards!  "
 # Loop through actions
 count=0
+if not os.path.exists("reports"):
+  os.makedirs("reports")
+if not os.path.exists("reports/PanelWatch.report"):
+  reportfile = open("reports/PanelWatch.report", "w")
+else:
+  reportfile = open("reports/PanelWatch.report", "a")
 for action in panelactions:
   count+=1
   # Get approver and flair
@@ -54,8 +61,10 @@ for action in panelactions:
   msg=""
   if post_flair != user_flair:
     msg = "/u/" + username + " with **" + user_flair + "** flair approved question [" + re.sub("[^a-zA-Z0-9\s]","", post.title[:24]) + "](" + post.url + ") with **" + post_flair + "** flair.  "
+    reportfile.write("\n"+str(post.created_utc)+"\t"+msg+"  ")
   else:
     msg = user_flair+"="+post_flair
   print("["+str(count)+"/"+str(nact)+"]\t"+msg+"  ")
+reportfile.close()
 # End PRAW stuff
 print('/r/'+target_sub+' read in '+str(int(time.time()-now))+' seconds')
