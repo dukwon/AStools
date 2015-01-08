@@ -2,6 +2,7 @@
 import praw
 import redditcredentials
 import time
+import os
 def main():
   # Log in, get subreddits
   user = redditcredentials.username
