@@ -44,6 +44,6 @@ def main():
     except praw.errors.InvalidUser:
       print "No such user", i
       pass
-  print target_sub " updated"
+  print target_sub, " updated"
 if __name__ == '__main__':
   main()
