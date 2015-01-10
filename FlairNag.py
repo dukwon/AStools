@@ -29,10 +29,12 @@ def main():
       # Ignore the new stuff
       if ageh>0:
         # Read flair
-        flair = item.get_flair_choices()['current']['flair_text']
+        flair = item.link_flair_text
+        if flair == None:
+          flair = "None"
         # Print queue
-        print(str(ageh).zfill(2)+':'+str(agem%60).zfill(2)+' ago: ['+flair.__str__()[:3]+'] '+item.__str__()+"  ")
-        if flair.__str__() == 'None':
+        print(str(ageh).zfill(2)+':'+str(agem%60).zfill(2)+' ago: ['+flair[:3]+'] '+item.__str__()+"  ")
+        if flair == "None":
           cs = item.comments
           # More than a few comments means something's going on
           if len(cs) < 5:
