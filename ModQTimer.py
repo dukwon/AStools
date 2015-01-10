@@ -6,6 +6,7 @@ import redditcredentials
 import mytools
 import time
 def main():
+  dangerphrases = ["would","speed of light","ftl","how can I"]
   now = time.time()
   user = redditcredentials.username
   passw = redditcredentials.password
@@ -29,15 +30,46 @@ def main():
       # Ignore the new stuff
       if ageh>8:
         # Read flair
-        flair = item.get_flair_choices()["current"]["flair_text"]
-        # Loop through flaired
-        if flair.__str__() != "None":
-          if item.author.is_mod:
+        flair = item.link_flair_text
+        if flair == None:
+          flair = "None"
+        # Flaired
+        if flair != "None":
+          reason = "this flaired post "
+          if item.author_flair_text != None:
             decision = "Approve"
-            reason = "OP is a mod"
-          elif:
-            
-          print(decision+": ["+flair.__str__()[:3]+"] '"+item.__str__()[:16]+"' because "+reason+"  ")
+            reason += "was posted by a flaired user"
+          elif ageh > 24:
+            decision = "Remove"
+            reason += "is over 24h old"
+          elif item.score <= 0:
+            decision = "Defer"
+            reason += "has been downvoted"
+          else:
+            danger = False
+            for phrase in dangerphrases:
+              danger = phrase in str(item).lower()
+              if danger:
+                break
+            if danger:
+              decision = "Defer"
+              reason += "contains the following dangerous word/phrase: **'" + phrase + "'**"
+            else:
+              decision = "Approve"
+              reason += "seems ok"
+        # Unflaired
+        else:
+          reason = "this unflaired post "
+          if item.author_flair_text != None:
+            decision = "Defer"
+            reason += "was posted by a flaired user"
+          elif ageh > 12:
+            decision = "Remove"
+            reason += "is over 12h old"
+          else:
+            decision = "Defer"
+            reason += "is under 12h old"
+        print(decision+": ["+flair.__str__()[:3]+"] '"+item.__str__()[:16]+"' because "+reason+".  ")
   # End PRAW stuff
   print("/r/"+target_sub+" read in "+str(int(time.time()-now))+" seconds")
 if __name__ == "__main__":
