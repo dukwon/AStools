@@ -29,14 +29,11 @@ def main():
   # Create list of P+ers
   panel = [mod["name"] for mod in mods["data"]["children"] if "posts" in mod["mod_permissions"] and mod["name"] != "AutoModerator"]
   # Retrieve items from the modqueue
-  log = mytools.ReadLog(sr=sr,time=now-3600,actiontype="approvelink")
+  log = mytools.ReadLog(sr=sr,time=now-3600*24,actiontype="approvelink")
   # Find actions by P+ers
   panelactions = [action for action in log if action.mod in panel]
   nact=len(panelactions)
   print "Stripped log to",nact,"P+ actions  "
-  # Are they doing at least a third of approvals?
-  if nact*3 < len(log):
-    print nact,"out of",str(len(log))+"?!","The lazy bastards!  "
   # Open file for logging
   if not os.path.exists("reports"):
     os.makedirs("reports")
@@ -53,7 +50,8 @@ def main():
     user_flair = sr.get_flair(r.get_redditor(user_name=username))['flair_css_class']
     # Get post and flair
     post = r.get_submission(url="http://www.reddit.com"+action.target_permalink)
-    post_flair = post.get_flair_choices()['current']['flair_css_class']
+    #post_flair = post.get_flair_choices()['current']['flair_css_class']
+    post_flair = post.link_flair_css_class
     # Sanitise input
     if post_flair == None:
       post_flair = "no post"
