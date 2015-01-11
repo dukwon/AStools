@@ -29,7 +29,7 @@ def main():
   # Create list of P+ers
   panel = [mod["name"] for mod in mods["data"]["children"] if "posts" in mod["mod_permissions"] and mod["name"] != "AutoModerator"]
   # Retrieve items from the modqueue
-  log = mytools.ReadLog(sr=sr,time=now-3600*24,actiontype="approvelink")
+  log = mytools.ReadLog(sr=sr,time=now-3600,actiontype="approvelink")
   # Find actions by P+ers
   panelactions = [action for action in log if action.mod in panel]
   nact=len(panelactions)
