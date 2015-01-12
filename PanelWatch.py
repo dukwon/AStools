@@ -28,6 +28,21 @@ def main():
       time.sleep(2)
   # Create list of P+ers
   panel = [mod["name"] for mod in mods["data"]["children"] if "posts" in mod["mod_permissions"] and mod["name"] not in ["AutoModerator","AskScienceModerator"]]
+  # Dictionary of allowed flairs. Key is P+er flair. Entries are post flairs
+  allowed = {
+    "math": ["math","phys","comp"],
+    "phys": ["phys","math","astro","eng"],
+    "astro":["astro","math","phys"],
+    "chem": ["chem","math","geo"],
+    "geo":  ["geo","chem"],
+    "eng":  ["eng","phys","math"],
+    "comp": ["comp","eng","math"],
+    "bio":  ["bio","chem","med"],
+    "med":  ["med","bio","neuro"],
+    "neuro":["neuro","med","psych"],
+    "psych":["psych","neuro","soc"],
+    "soc":  ["soc","psych"]
+    }
   # Retrieve items from the modqueue
   log = mytools.ReadLog(sr=sr,time=now-3600,actiontype="approvelink")
   # Find actions by P+ers
@@ -45,27 +60,38 @@ def main():
   count=0
   for action in panelactions:
     count+=1
-    # Get approver and flair
+    # Get approver flair
     user_flair = sr.get_flair(r.get_redditor(user_name=action.mod))['flair_css_class']
     # Get post and flair
     post = r.get_submission(url="http://www.reddit.com"+action.target_permalink)
-    #post_flair = post.get_flair_choices()['current']['flair_css_class']
     post_flair = post.link_flair_css_class
     # Sanitise input
     if post_flair == None:
       post_flair = "no post"
     if user_flair == None:
       user_flair = "no user"
+    if user_flair not in allowed:
+      user_flair += " [WARNING: NOT IN ALLOWED DICT]"
+    # Begin to build log message
+    msg = "/u/" + action.mod + " with **" + user_flair + "** flair approved question [" + re.sub("[^a-zA-Z0-9\s]","", post.title[:24]) + "](" + post.url + ") "
     # If approver flair class isn't the same as the link flair class, complain
-    msg = "/u/" + action.mod + " with **" + user_flair + "** flair approved question [" + re.sub("[^a-zA-Z0-9\s]","", post.title[:24]) + "](" + post.url + ") with **" + post_flair + "** flair "
     report=False
+    # Something cleverer will be
+    # if post_flair not in allowed_flairs[user_flair]:
+    # For now, dumb flair class matching
     if post_flair != user_flair:
+      msg += "with **" + post_flair + "** flair "
       report=True
+    else:
+      msg += "with " + post_flair + " flair "
+    # Check that approver has left a comment
     approver_comments = [comment for comment in post.comments if comment.author.name == action.mod]
     if len(approver_comments) > 0:
       msg += "and left a comment."
     else:
       msg += "and **didn't** leave a comment."
+      report=True
+    # Write to report file
     if report:
       reportfile.write("\n"+str(post.created_utc)+"\t"+msg+"  ")
     print("["+str(count)+"/"+str(nact)+"]\t"+msg+"  ")
