@@ -58,12 +58,17 @@ def main():
     if user_flair == None:
       user_flair = "no user"
     # If approver flair class isn't the same as the link flair class, complain
-    msg=""
+    msg = "/u/" + username + " with **" + user_flair + "** flair approved question [" + re.sub("[^a-zA-Z0-9\s]","", post.title[:24]) + "](" + post.url + ") with **" + post_flair + "** flair "
+    report=False
     if post_flair != user_flair:
-      msg = "/u/" + username + " with **" + user_flair + "** flair approved question [" + re.sub("[^a-zA-Z0-9\s]","", post.title[:24]) + "](" + post.url + ") with **" + post_flair + "** flair.  "
-      reportfile.write("\n"+str(post.created_utc)+"\t"+msg+"  ")
+      report=True
+    approver_comments = [comment for comment in post.comments if comment.author.name == username]
+    if len(approver_comments) > 0:
+      msg += "and left a comment."
     else:
-      msg = user_flair+"="+post_flair
+      msg += "and **didn't** leave a comment."
+    if report:
+      reportfile.write("\n"+str(post.created_utc)+"\t"+msg+"  ")
     print("["+str(count)+"/"+str(nact)+"]\t"+msg+"  ")
   reportfile.close()
   # End PRAW stuff
