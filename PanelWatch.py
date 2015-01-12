@@ -27,7 +27,7 @@ def main():
     except urllib2.HTTPError:
       time.sleep(2)
   # Create list of P+ers
-  panel = [mod["name"] for mod in mods["data"]["children"] if "posts" in mod["mod_permissions"] and mod["name"] != "AutoModerator"]
+  panel = [mod["name"] for mod in mods["data"]["children"] if "posts" in mod["mod_permissions"] and mod["name"] not in ["AutoModerator","AskScienceModerator"]]
   # Retrieve items from the modqueue
   log = mytools.ReadLog(sr=sr,time=now-3600,actiontype="approvelink")
   # Find actions by P+ers
