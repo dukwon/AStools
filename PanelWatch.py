@@ -77,7 +77,7 @@ def main():
     # If approver flair class isn't the same as the link flair class, complain
     report=False
     # Something cleverer will be
-    # if post_flair not in allowed_flairs[user_flair]:
+    # if post_flair not in allowed[user_flair]:
     # For now, dumb flair class matching
     if post_flair != user_flair:
       msg += "with **" + post_flair + "** flair "
