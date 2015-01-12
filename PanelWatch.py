@@ -44,7 +44,7 @@ def main():
     "soc":       ["soc","psych"]
     }
   # Retrieve items from the modqueue
-  log = mytools.ReadLog(sr=sr,time=now-3600,actiontype="approvelink")
+  log = mytools.ReadLog(sr=sr,time=now-3600*24,actiontype="approvelink")
   # Find actions by P+ers
   panelactions = [action for action in log if action.mod in panel]
   nact=len(panelactions)
@@ -67,25 +67,24 @@ def main():
     post_flair = post.link_flair_css_class
     # Sanitise input
     if post_flair == None:
-      post_flair = "no post"
+      post_flair = "no post flair"
     if user_flair == None:
-      user_flair = "no user"
+      user_flair = "no user flair"
     if user_flair not in allowed:
       user_flair += " [WARNING: NOT IN ALLOWED DICT]"
     # Begin to build log message
-    msg = "/u/" + action.mod + " with **" + user_flair + "** flair approved question [" + re.sub("[^a-zA-Z0-9\s]","", post.title[:24]) + "](" + post.url + ") "
+    msg = "/u/" + action.mod + " [" + user_flair + "] approved question [" + re.sub("[^a-zA-Z0-9\s]","", post.title[:24]) + "](" + post.url + ") "
     # If approver flair class isn't the same as the link flair class, complain
     report=False
     # Something cleverer will be
-    # if post_flair not in allowed[user_flair]:
-    # For now, dumb flair class matching
-    if post_flair != user_flair:
-      msg += "with **" + post_flair + "** flair "
+    if post_flair not in allowed[user_flair]:
+      msg += " **[" + post_flair + "]** "
       report=True
     else:
-      msg += "with " + post_flair + " flair "
+      msg += " [" + post_flair + "] "
     # Check that approver has left a comment
-    approver_comments = [comment for comment in post.comments if comment.author.name == action.mod]
+    comments = [comment for comment in post.comments if isinstance(comment, praw.objects.Comment)]
+    approver_comments = [comment for comment in comments if comment.author.name == action.mod]
     if len(approver_comments) > 0:
       msg += "and left a comment."
     else:
