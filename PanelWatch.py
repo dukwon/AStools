@@ -30,18 +30,18 @@ def main():
   panel = [mod["name"] for mod in mods["data"]["children"] if "posts" in mod["mod_permissions"] and mod["name"] not in ["AutoModerator","AskScienceModerator"]]
   # Dictionary of allowed flairs. Key is P+er flair. Entries are post flairs
   allowed = {
-    "math": ["math","phys","comp"],
-    "phys": ["phys","math","astro","eng"],
-    "astro":["astro","math","phys"],
-    "chem": ["chem","math","geo"],
-    "geo":  ["geo","chem"],
-    "eng":  ["eng","phys","math"],
-    "comp": ["comp","eng","math"],
-    "bio":  ["bio","chem","med"],
-    "med":  ["med","bio","neuro"],
-    "neuro":["neuro","med","psych"],
-    "psych":["psych","neuro","soc"],
-    "soc":  ["soc","psych"]
+    "maths":     ["maths","physics","computing"],
+    "physics":   ["physics","maths","astro","eng"],
+    "astro":     ["astro","maths","physics"],
+    "chem":      ["chem","maths","geo","physics"],
+    "geo":       ["geo","chem"],
+    "eng":       ["eng","physics","maths"],
+    "computing": ["computing","eng","maths"],
+    "bio":       ["bio","chem","med"],
+    "med":       ["med","bio","neuro"],
+    "neuro":     ["neuro","med","psych"],
+    "psych":     ["psych","neuro","soc"],
+    "soc":       ["soc","psych"]
     }
   # Retrieve items from the modqueue
   log = mytools.ReadLog(sr=sr,time=now-3600,actiontype="approvelink")
