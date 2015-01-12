@@ -46,8 +46,7 @@ def main():
   for action in panelactions:
     count+=1
     # Get approver and flair
-    username = action.mod
-    user_flair = sr.get_flair(r.get_redditor(user_name=username))['flair_css_class']
+    user_flair = sr.get_flair(r.get_redditor(user_name=action.mod))['flair_css_class']
     # Get post and flair
     post = r.get_submission(url="http://www.reddit.com"+action.target_permalink)
     #post_flair = post.get_flair_choices()['current']['flair_css_class']
@@ -58,11 +57,11 @@ def main():
     if user_flair == None:
       user_flair = "no user"
     # If approver flair class isn't the same as the link flair class, complain
-    msg = "/u/" + username + " with **" + user_flair + "** flair approved question [" + re.sub("[^a-zA-Z0-9\s]","", post.title[:24]) + "](" + post.url + ") with **" + post_flair + "** flair "
+    msg = "/u/" + action.mod + " with **" + user_flair + "** flair approved question [" + re.sub("[^a-zA-Z0-9\s]","", post.title[:24]) + "](" + post.url + ") with **" + post_flair + "** flair "
     report=False
     if post_flair != user_flair:
       report=True
-    approver_comments = [comment for comment in post.comments if comment.author.name == username]
+    approver_comments = [comment for comment in post.comments if comment.author.name == action.mod]
     if len(approver_comments) > 0:
       msg += "and left a comment."
     else:
