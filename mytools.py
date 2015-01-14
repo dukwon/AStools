@@ -2,6 +2,9 @@
 # Gives ReadQueue and ReadLog functions
 import sys
 import praw
+import urllib2
+import time
+import ast
 def ReadQueue(sr,only="",time=0,lim=1000):
   # Retrieve items from the modqueue
   last_item=None
@@ -92,3 +95,13 @@ def ReadLog(sr,time=0,lim=1000,actiontype=""):
   else:
     print "Retrieved", count, actiontype, "actions  "  
   return l
+def Panel(target_sub="askscience"):
+  while True:
+    try:
+      mods = ast.literal_eval(urllib2.urlopen("http://www.reddit.com/r/"+target_sub+"/about/moderators.json").read())
+      break
+    except urllib2.HTTPError:
+      time.sleep(2)
+  # Create list of P+ers
+  panel = [mod["name"] for mod in mods["data"]["children"] if "posts" in mod["mod_permissions"] and mod["name"] not in ["AutoModerator","AskScienceModerator"]]
+  return panel
