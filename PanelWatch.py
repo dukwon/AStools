@@ -28,9 +28,9 @@ def main():
     "geo":       ["geo","chem"],
     "eng":       ["eng","physics","maths"],
     "computing": ["computing","eng","maths"],
-    "bio":       ["bio","chem","med"],
-    "med":       ["med","bio","neuro"],
-    "neuro":     ["neuro","med","psych"],
+    "bio":       ["bio","chem","med","neuro"],
+    "med":       ["med","bio","neuro","chem"],
+    "neuro":     ["neuro","med","psych","bio"],
     "psych":     ["psych","neuro","soc"],
     "soc":       ["soc","psych"]
     }
