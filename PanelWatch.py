@@ -94,8 +94,8 @@ def main():
       if report:
         reportfile.write("\n"+str(post.created_utc)+"\t"+msg+"  ")
       print("["+str(count)+"/"+str(nact)+"]\t"+msg+"  ")
-  except:
-    print("["+str(count)+"/"+str(nact)+"]\tSomething went wrong: "+sys.exc_info()[0]+"  ")
+    except:
+      print("["+str(count)+"/"+str(nact)+"]\tSomething went wrong: "+sys.exc_info()[0]+"  ")
   reportfile.close()
   # End PRAW stuff
   print('/r/'+target_sub+' read in '+str(int(time.time()-now))+' seconds')
