@@ -105,3 +105,13 @@ def Panel(target_sub="askscience"):
   # Create list of P+ers
   panel = [mod["name"] for mod in mods["data"]["children"] if "posts" in mod["mod_permissions"] and mod["name"] not in ["AutoModerator","AskScienceModerator"]]
   return panel
+def FullMods(target_sub="askscience"):
+  while True:
+    try:
+      mods = ast.literal_eval(urllib2.urlopen("http://www.reddit.com/r/"+target_sub+"/about/moderators.json").read())
+      break
+    except urllib2.HTTPError:
+      time.sleep(2)
+  # Create list of P+ers
+  panel = [mod["name"] for mod in mods["data"]["children"] if "all" in mod["mod_permissions"]]
+  return panel
