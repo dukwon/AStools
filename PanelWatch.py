@@ -36,7 +36,7 @@ def main():
     "soc":       ["soc","psych"]
     }
   # Retrieve items from the modqueue
-  log = mytools.ReadLog(sr=sr,time=now-3600,actiontype="")
+  log = mytools.ReadLog(sr=sr,time=now-24*3600,actiontype="")
   # Find actions by P+ers
   panelactions = [action for action in log if action.mod in panel]
   nact=len(panelactions)
@@ -55,8 +55,14 @@ def main():
     report = False
     msg=""
     # Get P+er flair
-    user_flair = sr.get_flair(r.get_redditor(user_name=action.mod))['flair_css_class']
     try:
+      user_flair = sr.get_flair(r.get_redditor(user_name=action.mod))['flair_css_class']
+      if user_flair == None:
+        user_flair = "no user flair"
+        report = True
+      elif user_flair not in allowed:
+        user_flair += " [WARNING: NOT IN ALLOWED DICT]"
+        report = True
       if action.action=="approvelink":
         # Get post and flair
         post = r.get_submission(url="http://www.reddit.com"+action.target_permalink)
@@ -64,10 +70,6 @@ def main():
         # Sanitise input
         if post_flair == None:
           post_flair = "no post flair"
-        if user_flair == None:
-          user_flair = "no user flair"
-        if user_flair not in allowed:
-          user_flair += " [WARNING: NOT IN ALLOWED DICT]"
         # Begin to build log message
         msg = "/u/" + action.mod + " [" + user_flair + "] approved question [" + re.sub("[^a-zA-Z0-9\s]","", post.title[:24]) + "](" + post.url + ") "
         # If approver flair class isn't the same as the link flair class, complain
@@ -94,8 +96,12 @@ def main():
       if report:
         reportfile.write("\n"+str(action.created_utc)+"\t"+msg+"  ")
       print("["+str(count)+"/"+str(nact)+"]\t"+msg+"  ")
+    except praw.requests.exceptions.HTTPError:
+      msg="/u/"+action.mod+" might have been shadowbanned."
+      reportfile.write("\n"+str(action.created_utc)+"\t"+msg+"  ")
+      print("["+str(count)+"/"+str(nact)+"]\t"+msg+"  ")
     except:
-      print("["+str(count)+"/"+str(nact)+"]\tSomething went wrong: "+sys.exc_info()[0]+"  ")
+      print("["+str(count)+"/"+str(nact)+"]\tSomething went wrong: /u/"+action.mod+" did "+action.action+"  ")
   reportfile.close()
   # End PRAW stuff
   print('/r/'+target_sub+' read in '+str(int(time.time()-now))+' seconds')
