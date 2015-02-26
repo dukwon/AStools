@@ -59,8 +59,10 @@ def main():
       user_flair = sr.get_flair(r.get_redditor(user_name=action.mod))['flair_css_class']
       if user_flair == None:
         user_flair = "no user flair"
-      if user_flair not in allowed:
+        report = True
+      elif user_flair not in allowed:
         user_flair += " [WARNING: NOT IN ALLOWED DICT]"
+        report = True
       if action.action=="approvelink":
         # Get post and flair
         post = r.get_submission(url="http://www.reddit.com"+action.target_permalink)
