@@ -36,7 +36,7 @@ def main():
     "soc":       ["soc","psych"]
     }
   # Retrieve items from the modqueue
-  log = mytools.ReadLog(sr=sr,time=now-24*3600,actiontype="")
+  log = mytools.ReadLog(sr=sr,time=now-3600,actiontype="")
   # Find actions by P+ers
   panelactions = [action for action in log if action.mod in panel]
   nact=len(panelactions)
