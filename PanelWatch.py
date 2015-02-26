@@ -55,8 +55,8 @@ def main():
     report = False
     msg=""
     # Get P+er flair
-    user_flair = sr.get_flair(r.get_redditor(user_name=action.mod))['flair_css_class']
     try:
+      user_flair = sr.get_flair(r.get_redditor(user_name=action.mod))['flair_css_class']
       if action.action=="approvelink":
         # Get post and flair
         post = r.get_submission(url="http://www.reddit.com"+action.target_permalink)
@@ -93,6 +93,10 @@ def main():
       # Write to report file
       if report:
         reportfile.write("\n"+str(action.created_utc)+"\t"+msg+"  ")
+      print("["+str(count)+"/"+str(nact)+"]\t"+msg+"  ")
+    except HTTPError:
+      msg="/u/"+action.mod+" might have been shadowbanned."
+      reportfile.write("\n"+str(action.created_utc)+"\t"+msg+"  ")
       print("["+str(count)+"/"+str(nact)+"]\t"+msg+"  ")
     except:
       print("["+str(count)+"/"+str(nact)+"]\tSomething went wrong: "+sys.exc_info()[0]+"  ")
