@@ -36,7 +36,7 @@ def main():
     "soc":       ["soc","psych"]
     }
   # Retrieve items from the modqueue
-  log = mytools.ReadLog(sr=sr,time=now-3600,actiontype="")
+  log = mytools.ReadLog(sr=sr,time=now-24*3600,actiontype="")
   # Find actions by P+ers
   panelactions = [action for action in log if action.mod in panel]
   nact=len(panelactions)
@@ -94,7 +94,7 @@ def main():
       if report:
         reportfile.write("\n"+str(action.created_utc)+"\t"+msg+"  ")
       print("["+str(count)+"/"+str(nact)+"]\t"+msg+"  ")
-    except HTTPError:
+    except praw.requests.exceptions.HTTPError:
       msg="/u/"+action.mod+" might have been shadowbanned."
       reportfile.write("\n"+str(action.created_utc)+"\t"+msg+"  ")
       print("["+str(count)+"/"+str(nact)+"]\t"+msg+"  ")
