@@ -23,7 +23,7 @@ def main():
   else:
     reportfile = open(reportdir+reportfile, "r")
     now = time.time()
-    report = "#PanelWatch Report\n\n---\n"
+    report = "#PanelWatch Report\n[Full log available here](http://188.166.55.237/cgi-bin/fetchreport.py)\n---\n"
     title = "PanelWatch Report - " + time.strftime("%a %d %b %Y", time.localtime(now))
     footer = "\n---\n\n Some actions not included. [See full log](http://188.166.55.237/cgi-bin/fetchreport.py)"
     unreported = 0
