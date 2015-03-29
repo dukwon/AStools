@@ -50,7 +50,7 @@ def main():
     reportfile = open("reports/PanelWatch.report", "a")
   # Loop through actions
   count=0
-  for action in panelactions:
+  for action in reversed(panelactions):
     count+=1
     report = False
     msg=""
